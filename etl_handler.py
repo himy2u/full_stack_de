@@ -9,6 +9,10 @@ co potrzebuje...?:
         + "execute sql scrpt" (podstawowa funkcja do wszelkich operacji na dwh. odpalana przez airflow)
     3) airflow dags etc
 
+
+do airflow spoko artykul:
+https://stlong0521.github.io/20161023%20-%20Airflow.html
+
 jeszcze jakies inne notatki:
 mam 4 zestawy tabel: delta, stg, wrk i dwh. nie chce powtarzac tego samego kodu DDL.... ponadto, dobrze by bylo zeby bylo to z automatu...
 
@@ -32,7 +36,7 @@ class EtlHandler():
     def __init__(self):
         self.conn = psycopg2.connect(dbname='oceanrecords', host='localhost', port=5432, user='etl_usr', password='meget')
         self.conn.autocommit = True
-        self.cursor = self.conn.cursor()
+        self.cursor = self.conn.cursor()        
 
     def stage_data(self, extraction_dir, table_to_stage):
         """
@@ -55,8 +59,9 @@ class EtlHandler():
         for sfile in status_fiels:
             data_file_path = os.path.join(tbl_extraction_dir, 'data', sfile.split('.')[1]+'.csv')
             copy_cmd = """COPY stage.dlt_{} ({}) 
-                          FROM '{}' \nHEADER DELIMITER ',' CSV NULL AS 'NULL'; 
+                          FROM '{}' \nHEADER DELIMITER ',' CSV NULL AS '';
                        """.format(raw_tbl_name, columns, data_file_path)
+            print(copy_cmd)
             self.cursor.execute(copy_cmd)
         sql_script = """
                       BEGIN;\n
@@ -101,9 +106,14 @@ class EtlHandler():
         return sorted(ready_files, key=lambda x: x.split('.')[1])
 
 
-def main(table_to_stage=None, extraction_dir=None):
+def main(table_to_stage=None, extraction_dir=None, sql_script_path=None):
     etlh = EtlHandler()
-    etlh.stage_data(extraction_dir, table_to_stage)
+    if (table_to_stage != None) and (extraction_dir != None):
+        etlh.stage_data(extraction_dir, table_to_stage)
+    elif sql_script_path != None:
+        with open(sql_script_path, 'r') as input_sql:
+            etlh.cursor.execute(input_sql.read())
+
 
 if __name__ == '__main__':
     """
@@ -114,7 +124,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--table_to_stage', default=None, help='Table from OceanRecords db to be staged')
     parser.add_argument('--extraction_abs_path', default=None, help='Absolute path to folder with extraction data')
+    parser.add_argument('--sql_script_path', default=None, help='Path to sql script')
     args = parser.parse_args()
     main(table_to_stage=args.table_to_stage,
-         extraction_dir=args.extraction_abs_path)
+         extraction_dir=args.extraction_abs_path,
+         sql_script_path=args.sql_script_path)
 

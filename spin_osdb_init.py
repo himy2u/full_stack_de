@@ -83,7 +83,7 @@ class CopyInitAddressesRows(luigi.Task):
     def run(self):
         with self.output().open('w') as f:
             copy_cmd = """ COPY os.addresses (addresse_line1, addresse_line2, city, zip, country)
-                           FROM '{}' DELIMITER ',' CSV
+                           FROM '{}' DELIMITER ',' CSV NULL AS 'NULL'
                        """.format(os.path.join(os.getcwd(), self.input().path))
             handler.cursor.execute(copy_cmd)
 
@@ -335,6 +335,6 @@ class OceanRecordsInit(luigi.WrapperTask):
 
 if __name__ == '__main__':
     """
-    usage: python fde1_spin_db_init.py OceanRecordsInit --local-scheduler
+    usage: python spin_osdb_init.py OceanRecordsInit --local-scheduler
     """
     luigi.run()

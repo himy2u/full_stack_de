@@ -42,7 +42,7 @@ class OceanRecordsHandler():
 
     def new_address_row(self):
         return [self.faker.street_address(),
-                self.faker.secondary_address() if random.randint(0,1) == 1 else '',
+                self.faker.secondary_address() if random.randint(0,1) == 1 else 'NULL',
                 self.faker.city(),
                 self.faker.zipcode(),
                 self.faker.country()]
