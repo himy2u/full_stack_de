@@ -12,7 +12,7 @@ CREATE TABLE work.wrk_d_product (
     ,valid_to              TIMESTAMP
 );
 
-DROP TABLE IF EXISTS dwh.d_product;
+DROP TABLE IF EXISTS dwh.d_product  CASCADE;
 CREATE TABLE dwh.d_product (
     product_sk             SERIAL         PRIMARY KEY
     ,product_id            INTEGER        NOT NULL

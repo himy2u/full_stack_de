@@ -11,7 +11,7 @@ CREATE TABLE work.wrk_d_supplier (
     ,updated_date          TIMESTAMP
 );
 
-DROP TABLE IF EXISTS dwh.d_supplier;
+DROP TABLE IF EXISTS dwh.d_supplier CASCADE;
 CREATE TABLE dwh.d_supplier (
     supplier_sk            SERIAL         PRIMARY KEY
     ,supplier_id           INTEGER        NOT NULL

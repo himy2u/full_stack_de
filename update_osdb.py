@@ -5,7 +5,7 @@ Part 1.1 - inserts & updates for OceanRecord db
 For OceanRecords datbase to simulate real worlds operational system - new records needs to be inserted and old one updated.
 That script will provide following actions:
     + place order           (insert into fact)
-    + update order          (for updating fact)
+    + update order          (update fact row)
     + new customer_address  (insert into dim)
     + update product price  (for SCD type 2 use case)
 """

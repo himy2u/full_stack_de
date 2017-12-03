@@ -26,3 +26,14 @@ CREATE SCHEMA work;
 
 DROP SCHEMA IF EXISTS dwh;
 CREATE SCHEMA dwh;
+
+DROP SCHEMA IF EXISTS etl_control;
+CREATE SCHEMA etl_control;
+
+/* for Airflow */
+DROP DATABASE IF EXISTS airflow;
+CREATE DATABASE airflow;
+
+CREATE USER "airflow" WITH PASSWORD 'airflow';
+ALTER USER "airflow" WITH LOGIN;
+ALTER USER "airflow" WITH SUPERUSER;

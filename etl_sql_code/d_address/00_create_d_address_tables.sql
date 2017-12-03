@@ -13,7 +13,7 @@ CREATE TABLE work.wrk_d_address (
     ,updated_date        TIMESTAMP
 );
 
-DROP TABLE IF EXISTS dwh.d_address;
+DROP TABLE IF EXISTS dwh.d_address CASCADE;
 CREATE TABLE dwh.d_address (
     address_sk           SERIAL         PRIMARY KEY
     ,address_id          INTEGER        NOT NULL

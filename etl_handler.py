@@ -1,29 +1,3 @@
-"""
-co potrzebuje...?:
-    OK 1) extractor - skrypt ktory bierze jako konfiguracje tabele ze zrodla, zgarnia dane (ogarnia pobieranie tylko delty) i `wypluwa`
-       plik (bede bazowal na csv dla prostoty) i definicje tabli stg
-       ten skrypt `kontaktuje sie` ze zrodlem tylko i wylacznie
-    2) etl_handler - ten skrypt sluzy do operacji na DWH: 
-        OK + "data staging" (wez dane, stworz tabele jezeli trzeba, pilnuj wszelkich znacznikow czasu itp)
-        + "spin dwh tables" (odpala ddl przygotowany do utowrzenia wrk i dwh tabel. proste ale zapobiega bleda ludzi)
-        + "execute sql scrpt" (podstawowa funkcja do wszelkich operacji na dwh. odpalana przez airflow)
-    3) airflow dags etc
-
-
-do airflow spoko artykul:
-https://stlong0521.github.io/20161023%20-%20Airflow.html
-
-jeszcze jakies inne notatki:
-mam 4 zestawy tabel: delta, stg, wrk i dwh. nie chce powtarzac tego samego kodu DDL.... ponadto, dobrze by bylo zeby bylo to z automatu...
-
-z drugiej strony, czlowiek musi zaprogramowac transform step.... wiec moze cos semi-automatycznego... ?
-
-albo np czlowiek tez musi stworzyc wrk i dwh (stg moze byc z automatu bo mam definicje z systemu), to jest wsadzone do ETL jako 
-opcjonalny krok? no ale i tak wtedy trzeba sie meczyc zeby trzymac "up-to-date" zmiany... innaczej to nie bedzie zsynchronizowane...
-
-moze pozostac przy skrypcie, ktory musi byc odpalany recznie? i zawiera on poprostu 2 ddl z tabelami i spokoj... wychodzi na to samo
-a dag ktorszy i nie mylacy...
-"""
 # built-in
 import argparse
 import json

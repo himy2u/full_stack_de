@@ -19,7 +19,7 @@ CREATE TABLE work.wrk_d_customer (
     ,updated_date      TIMESTAMP
 );
 
-DROP TABLE IF EXISTS dwh.d_customer;
+DROP TABLE IF EXISTS dwh.d_customer  CASCADE;
 CREATE TABLE dwh.d_customer (
     customer_sk        SERIAL       PRIMARY KEY
     ,customer_id       INTEGER      NOT NULL

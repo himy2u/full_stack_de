@@ -4,16 +4,16 @@ DROP TABLE IF EXISTS work.wrk_d_payment;
 CREATE TABLE work.wrk_d_payment (
     payment_sk           INTEGER
     ,payment_id          INTEGER
-    ,name        VARCHAR(40)
+    ,name                VARCHAR(40)
     ,created_date        TIMESTAMP
     ,updated_date        TIMESTAMP
 );
 
-DROP TABLE IF EXISTS dwh.d_payment;
+DROP TABLE IF EXISTS dwh.d_payment CASCADE;
 CREATE TABLE dwh.d_payment (
     payment_sk           SERIAL         PRIMARY KEY
     ,payment_id          INTEGER        NOT NULL
-    ,name        VARCHAR(40)    NOT NULL
+    ,name                VARCHAR(40)    NOT NULL
     ,created_date        TIMESTAMP
     ,updated_date        TIMESTAMP
     ,etl_created_date    TIMESTAMP      DEFAULT NOW()

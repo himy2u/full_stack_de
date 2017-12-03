@@ -41,8 +41,8 @@ class OceanRecordsHandler():
                 self.faker.date_between(start_date=self.min_reg_date, end_date='today')]
 
     def new_address_row(self):
-        return [self.faker.street_address(),
-                self.faker.secondary_address() if random.randint(0,1) == 1 else 'NULL',
-                self.faker.city(),
-                self.faker.zipcode(),
-                self.faker.country()]
+        return [self.faker.street_address().replace("'", ''),
+                self.faker.secondary_address().replace("'", '') if random.randint(0,1) == 1 else 'NULL',
+                self.faker.city().replace("'", ''),
+                self.faker.zipcode().replace("'", ''),
+                self.faker.country().replace("'", '')]

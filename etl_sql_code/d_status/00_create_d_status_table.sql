@@ -9,7 +9,7 @@ CREATE TABLE work.wrk_d_status (
     ,updated_date        TIMESTAMP
 );
 
-DROP TABLE IF EXISTS dwh.d_status;
+DROP TABLE IF EXISTS dwh.d_status CASCADE;
 CREATE TABLE dwh.d_status (
     status_sk            SERIAL         PRIMARY KEY
     ,status_id           INTEGER        NOT NULL
