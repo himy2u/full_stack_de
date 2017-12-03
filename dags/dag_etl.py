@@ -1,25 +1,24 @@
 # built-in
 import datetime
+import os
 
 # 3rd party
 from airflow import DAG
-from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.subdag_operator import SubDagOperator
 
 # custom
 from subdag_extraction import extract_backed_tables
 from subdag_load_dims import load_dims
+from subdag_load_facts import load_facts
 
 sched = datetime.timedelta(minutes=5)
 start_date = datetime.datetime(2017, 10, 23, 7, 0)
 catchup = False
-
-# TODO: put to environmental variables:
-extraction_dir = '/Users/stulski/Desktop/osobiste/fullstack_de/extraction'
-python_bin = '/Users/stulski/py3/bin/python'
-python_scripts_dir = '/Users/stulski/Desktop/osobiste/fullstack_de/'
-sql_scripts_dir = '/Users/stulski/Desktop/osobiste/fullstack_de/airflow/etl_sql_code/'
+extraction_dir = os.environ['EXTRACTION_DIR']
+python_bin = os.path.join(os.environ['PYTHON_DIR'],'python')
+python_scripts_dir = os.environ['PYTHON_SCRIPTS_DIR']
+sql_scripts_dir = os.environ['SQL_SCRIPTS_DIR']
 
 extraction_cmd = '{} {}extractor.py --extraction_dir={} --table='.format(python_bin, python_scripts_dir, extraction_dir)
 stage_cmd = '{} {}etl_handler.py --extraction_abs_path={} --table_to_stage='.format(python_bin, python_scripts_dir, extraction_dir)
@@ -45,7 +44,10 @@ subdag_EXTRACT = SubDagOperator(subdag = extract_backed_tables(task_default_args
 subdag_LOAD_DIMS = SubDagOperator(subdag = load_dims(task_default_args, sched, exec_sql_cmd),
                                   task_id = 'ETL-DIMS', dag=dag, trigger_rule='all_done')
 
+subdag_LOAD_FACTS = SubDagOperator(subdag=load_facts(task_default_args, sched, exec_sql_cmd),
+                                   task_id = 'ETL-FACTS', dag=dag, trigger_rule='all_done')
+
 dflow_end = DummyOperator(task_id = 'END-ETL', dag=dag, trigger_rule='all_done') # dummy ending point
 
 # Set all dependencies
-dflow_start >> subdag_EXTRACT >> subdag_LOAD_DIMS >> dflow_end
+dflow_start >> subdag_EXTRACT >> subdag_LOAD_DIMS >> subdag_LOAD_FACTS >> dflow_end
