@@ -165,11 +165,11 @@ class CreateInitCustomerOrdersRows(luigi.Task):
         probabilities.extend([(0.5)/g2]*g2)
         probabilities.extend([(0.3)/g3]*g3)
         pay_mets_ids = handler.get_res_single_col('SELECT DISTINCT payment_met_id FROM os.payment_methods;')
-        ord_stat_ids = handler.get_res_single_col('SELECT DISTINCT order_status_id FROM os.order_status;')
+        ord_stat_ids = handler.get_res_single_col('SELECT DISTINCT order_status_id FROM os.order_status ORDER BY order_status_id ASC;')
         with self.output().open('w') as f:
             writer = csv.writer(f)
             for user_address in np.random.choice(customer_address_ids, size=(handler.customer_orders_rec_no,), p=probabilities):
-                order_status = random.choice(ord_stat_ids)
+                order_status = np.random.choice(ord_stat_ids, size=1, p=[0.2, 0.5, 0.1, 0.1, 0.1])[0]
                 min_order_date =  datetime.date(datetime.date.today().year - 7, 1, 1)
                 order_placed_date = handler.faker.date_between(start_date=min_order_date, end_date='today')
                 order_paid_date =  order_placed_date + datetime.timedelta(days=random.randint(1,7)) if order_status != 1 else 'NULL'
